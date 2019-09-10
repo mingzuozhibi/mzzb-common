@@ -6,7 +6,7 @@
 
     <groupId>com.mingzuozhibi</groupId>
     <artifactId>mzzb-common</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.1.0</version>
 
     <name>mzzb-common</name>
     <url>https://github.com/mingzuozhibi/mzzb-common</url>
