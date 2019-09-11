@@ -15,6 +15,7 @@ import java.io.Serializable;
 public abstract class BaseModel implements Serializable {
 
     @Id
+    @Expose
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
