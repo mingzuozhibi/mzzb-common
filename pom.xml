@@ -8,9 +8,36 @@
     <artifactId>mzzb-common</artifactId>
     <version>0.1.0</version>
 
-    <name>mzzb-common</name>
+    <name>Mzzb Common</name>
     <url>https://github.com/mingzuozhibi/mzzb-common</url>
     <description>Common Module For Mingzuozhibi.com</description>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>fuhaiwei</name>
+            <email>fuhaiwei@126.com</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <tag>master</tag>
+        <url>https://github.com/mingzuozhibi/mzzb-common.git</url>
+        <connection>scm:git:git@github.com:mingzuozhibi/mzzb-common.git</connection>
+        <developerConnection>scm:git:git@github.com:mingzuozhibi/mzzb-common.git</developerConnection>
+    </scm>
+
+    <issueManagement>
+        <system>Github</system>
+        <url>https://github.com/mingzuozhibi/mzzb-common/issues</url>
+    </issueManagement>
 
     <properties>
         <java.version>1.8</java.version>
@@ -70,28 +97,6 @@
             </plugin>
         </plugins>
     </build>
-
-    <licenses>
-        <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-
-    <scm>
-        <tag>master</tag>
-        <url>git@github.com:mingzuozhibi/mzzb-common.git</url>
-        <connection>scm:git:git@github.com:mingzuozhibi/mzzb-common.git</connection>
-        <developerConnection>scm:git:git@github.com:mingzuozhibi/mzzb-common.git</developerConnection>
-    </scm>
-
-    <developers>
-        <developer>
-            <name>fuhaiwei</name>
-            <email>fuhaiwei@126.com</email>
-        </developer>
-    </developers>
 
     <profiles>
         <profile>
