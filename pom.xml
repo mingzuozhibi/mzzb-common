@@ -6,7 +6,7 @@
 
     <groupId>com.mingzuozhibi</groupId>
     <artifactId>mzzb-common</artifactId>
-    <version>0.1.1</version>
+    <version>0.2.0</version>
 
     <name>Mzzb Common</name>
     <url>https://github.com/mingzuozhibi/mzzb-common</url>
@@ -164,6 +164,18 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-release-plugin</artifactId>
                         <version>2.5.3</version>
+                    </plugin>
+                    <!--autoReleaseAfterClose-->
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.8</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>sonatype-nexus-staging</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>

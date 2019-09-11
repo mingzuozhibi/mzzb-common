@@ -1,5 +1,6 @@
 package mingzuozhibi.common;
 
+import com.google.gson.annotations.Expose;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,6 +19,7 @@ public abstract class BaseModel implements Serializable {
     private Long id;
 
     @Version
+    @Expose(serialize = false, deserialize = false)
     private Long version;
 
 }
