@@ -3,6 +3,7 @@ package mingzuozhibi.common;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public class BaseController {
 
@@ -30,8 +31,9 @@ public class BaseController {
 
     public JsonElement buildPage(Page<?> page) {
         JsonObject object = new JsonObject();
-        object.addProperty("pageSize", page.getNumberOfElements());
-        object.addProperty("currentPage", page.getNumber() + 1);
+        Pageable pageable = page.getPageable();
+        object.addProperty("pageSize", pageable.getPageSize());
+        object.addProperty("currentPage", pageable.getPageNumber() + 1);
         object.addProperty("totalElements", page.getTotalElements());
         return object;
     }
