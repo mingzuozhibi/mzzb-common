@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 @Slf4j
+@Deprecated
 public abstract class ChromeHelper {
 
     public static void doInSessionFactory(Consumer<SessionFactory> consumer) {
