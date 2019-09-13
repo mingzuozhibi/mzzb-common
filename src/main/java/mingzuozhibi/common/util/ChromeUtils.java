@@ -59,6 +59,7 @@ public abstract class ChromeUtils {
                 session.waitDocumentReady(38000);
                 session.wait(2000);
                 result.setContent(session.getOuterHtml("body"));
+                break;
             } catch (Exception e) {
                 result.pushError(e);
             }
