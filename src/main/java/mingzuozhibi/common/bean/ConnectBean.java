@@ -1,6 +1,12 @@
-package mingzuozhibi.common;
+package mingzuozhibi.common.bean;
 
 import lombok.extern.slf4j.Slf4j;
+import mingzuozhibi.common.jms.JmsConnect;
+import mingzuozhibi.common.jms.JmsMessage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
@@ -9,9 +15,28 @@ import java.util.Enumeration;
 import java.util.Optional;
 
 @Slf4j
-public abstract class InetAddressHelper {
+@Component
+public class ConnectBean implements CommandLineRunner {
 
-    public static Optional<String> getHostAddress() {
+    @Value("${server.port}")
+    private int port;
+
+    @Autowired
+    private JmsConnect jmsConnect;
+
+    @Autowired
+    private JmsMessage jmsMessage;
+
+    public void run(String... args) {
+        Optional<String> hostAddress = getHostAddress();
+        if (hostAddress.isPresent()) {
+            jmsConnect.connect(hostAddress.get() + ":" + port);
+        } else {
+            jmsMessage.warning("Can't get network address");
+        }
+    }
+
+    private Optional<String> getHostAddress() {
         try {
             Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
             while (networkInterfaces.hasMoreElements()) {
@@ -30,7 +55,7 @@ public abstract class InetAddressHelper {
         return Optional.empty();
     }
 
-    private static boolean isNotLocalAddress(InetAddress address) {
+    private boolean isNotLocalAddress(InetAddress address) {
         return !address.isLoopbackAddress()
                 && !address.isAnyLocalAddress()
                 && !address.isLinkLocalAddress()

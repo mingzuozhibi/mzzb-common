@@ -1,12 +1,11 @@
-package mingzuozhibi.common;
+package mingzuozhibi.common.util;
 
 import io.webfolder.cdp.Launcher;
 import io.webfolder.cdp.session.Session;
 import io.webfolder.cdp.session.SessionFactory;
 import lombok.extern.slf4j.Slf4j;
+import mingzuozhibi.common.model.Result;
 import org.apache.commons.io.IOUtils;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -17,8 +16,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 @Slf4j
-@Deprecated
-public abstract class ChromeHelper {
+public abstract class ChromeUtils {
 
     public static void doInSessionFactory(Consumer<SessionFactory> consumer) {
         String uuid = UUID.randomUUID().toString().substring(0, 8);
@@ -52,22 +50,20 @@ public abstract class ChromeHelper {
                     "AppleWebKit/537.36 (KHTML, like Gecko) " +
                     "Chrome/76.0.3809.132 Safari/537.36";
 
-    public static Document waitRequest(SessionFactory factory, String url) {
-        Exception lastThrown = null;
+    public static Result<String> waitResult(SessionFactory factory, String url) {
+        Result<String> result = new Result<>();
         for (int retry = 0; retry < 3; retry++) {
             try (Session session = factory.create()) {
                 session.setUserAgent(USER_AGENT);
                 session.navigate(url);
                 session.waitDocumentReady(38000);
                 session.wait(2000);
-                return Jsoup.parseBodyFragment(session.getOuterHtml("body"));
+                result.setContent(session.getOuterHtml("body"));
             } catch (Exception e) {
-                lastThrown = e;
+                result.pushError(e);
             }
         }
-        String format = "Chrome: 无法获取网页内容[url=%s][message=%s]";
-        String message = String.format(format, url, lastThrown.getMessage());
-        throw new RuntimeException(message, lastThrown);
+        return result;
     }
 
     public static void threadSleep(int timeout) {
