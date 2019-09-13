@@ -18,9 +18,14 @@ public class JmsService {
     @Autowired
     private JmsTemplate template;
 
-    public void sendJson(String destination, String data) {
-        template.convertAndSend(destination, data);
-        log.info("JMS -> {} {}", destination, data);
+    public void sendJson(String destination, String json, String message) {
+        template.convertAndSend(destination, json);
+        log.info("JMS -> {} {}", destination, message);
+    }
+
+    public void sendJson(String destination, String json) {
+        template.convertAndSend(destination, json);
+        log.info("JMS -> {} {}", destination, json);
     }
 
     public String buildJson(JsonElement data) {
