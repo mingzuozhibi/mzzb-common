@@ -26,7 +26,12 @@ public class Result<T> {
         return Optional.ofNullable(errorMessage).orElseGet(() -> formatErrors(errors));
     }
 
+    @Deprecated
     public boolean notDone() {
+        return content == null;
+    }
+
+    public boolean isUnfinished() {
         return content == null;
     }
 
