@@ -35,6 +35,14 @@ public class Result<T> {
         return content == null;
     }
 
+    public void syncResult(Result<T> result) {
+        if (result.isUnfinished()) {
+            this.setErrorMessage(result.formatError());
+        } else {
+            this.setContent(result.getContent());
+        }
+    }
+
     public static <T> Result<T> ofContent(T content) {
         Result<T> result = new Result<>();
         result.setContent(content);
