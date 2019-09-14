@@ -41,16 +41,16 @@ public class Result<T> {
         return result;
     }
 
-    public static Result<?> ofExceptions(Exception... exceptions) {
-        Result<?> result = new Result<>();
+    public static Result ofExceptions(Exception... exceptions) {
+        Result result = new Result();
         for (Exception e : exceptions) {
             result.pushError(e);
         }
         return result;
     }
 
-    public static Result<?> ofErrorMessage(String errorMessage) {
-        Result<?> result = new Result<>();
+    public static Result ofErrorMessage(String errorMessage) {
+        Result result = new Result();
         result.setErrorMessage(errorMessage);
         return result;
     }
@@ -65,10 +65,10 @@ public class Result<T> {
         }
         AtomicInteger count = new AtomicInteger(0);
         return errors.stream()
-            .map(e -> e.getClass().getSimpleName() + ": " + e.getMessage())
-            .distinct()
-            .map(str -> String.format("(%d)[%s]", count.incrementAndGet(), str))
-            .collect(Collectors.joining(" "));
+                .map(e -> e.getClass().getSimpleName() + ": " + e.getMessage())
+                .distinct()
+                .map(str -> String.format("(%d)[%s]", count.incrementAndGet(), str))
+                .collect(Collectors.joining(" "));
     }
 
 }
