@@ -26,11 +26,6 @@ public class Result<T> {
         return Optional.ofNullable(errorMessage).orElseGet(() -> formatErrors(errors));
     }
 
-    @Deprecated
-    public boolean notDone() {
-        return content == null;
-    }
-
     public boolean isUnfinished() {
         return content == null;
     }
@@ -77,6 +72,11 @@ public class Result<T> {
                 .distinct()
                 .map(str -> String.format("(%d)[%s]", count.incrementAndGet(), str))
                 .collect(Collectors.joining(" "));
+    }
+
+    @Deprecated
+    public boolean notDone() {
+        return content == null;
     }
 
 }
