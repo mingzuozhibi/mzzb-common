@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import mingzuozhibi.common.jms.JmsMessage;
 import mingzuozhibi.common.model.Result;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,9 +14,7 @@ import java.io.IOException;
 @Getter
 public class SpiderRecorder {
 
-    @Autowired
     private JmsMessage jmsMessage;
-
     private String dataName;
 
     private int fetchCount;
@@ -26,7 +23,7 @@ public class SpiderRecorder {
 
     private int taskCount;
     private int doneCount;
-    private int rowCount;
+    private int dataCount;
 
     public SpiderRecorder(String dataName, int taskCount, JmsMessage jmsMessage) {
         this.dataName = dataName;
@@ -35,16 +32,17 @@ public class SpiderRecorder {
     }
 
     public void jmsStartUpdate() {
-        jmsMessage.warning("Now update the %s, a total of %d", this.dataName, this.taskCount);
+        jmsMessage.info("更新%s：开始", this.dataName);
+        jmsMessage.info("更新%s：共%d个任务", this.dataName, this.taskCount);
     }
 
     public void jmsEndUpdate() {
-        jmsMessage.info("Update %s is complete", this.dataName);
+        jmsMessage.info("更新%s：结束", this.dataName);
     }
 
     public boolean checkBreakCount(int maxBreakCount) {
         if (this.breakCount >= maxBreakCount) {
-            jmsMessage.warning("Continuous error reached %d times, the task stopped", maxBreakCount);
+            jmsMessage.warning("更新%s：连续%d次更新失败", maxBreakCount);
             return true;
         }
         return false;
@@ -52,12 +50,13 @@ public class SpiderRecorder {
 
     public void jmsStartUpdateRow(String origin) {
         this.fetchCount++;
-        jmsMessage.info("Start updating %s (%s/%d)[%s]", this.dataName, this.fetchCount, this.taskCount, origin);
+        jmsMessage.info("正在抓取：(%s/%d)[%s]", this.fetchCount, this.taskCount, origin);
     }
 
+    @Deprecated
     public boolean checkUnfinished(Result<?> result, String origin) {
         if (result.isUnfinished()) {
-            jmsMessage.warning("An error occurred while updating the content: [%s]", origin);
+            jmsMessage.warning("抓取失败：%s", origin);
             this.breakCount++;
             this.errorCount++;
             return true;
@@ -65,27 +64,49 @@ public class SpiderRecorder {
         return false;
     }
 
+    public boolean checkUnfinished(Result<?> result) {
+        if (result.isUnfinished()) {
+            jmsMessage.warning("抓取失败：%s", result.formatError());
+            this.breakCount++;
+            this.errorCount++;
+            return true;
+        }
+        return false;
+    }
+
+    @Deprecated
     public void jmsSuccessRow(String message) {
         this.breakCount = 0;
         this.doneCount++;
-        jmsMessage.info("Successfully updated: %s", message);
+        jmsMessage.info("成功更新：(%s/%d)[%s]", this.fetchCount, this.taskCount, message);
+    }
+
+    public void jmsSuccessRow(String origin, String message) {
+        this.breakCount = 0;
+        this.doneCount++;
+        jmsMessage.info("成功更新：(%s/%d)[%s][%s]", this.fetchCount, this.taskCount, origin, message);
+    }
+
+    public void jmsFoundData(String message) {
+        this.dataCount++;
+        jmsMessage.success(message);
     }
 
     public void jmsFailedRow(String message) {
         this.breakCount++;
         this.errorCount++;
-        jmsMessage.warning("Failed updated: %s", message);
+        jmsMessage.warning("更新失败：%s", message);
     }
 
     public void jmsErrorRow(Exception e) {
         this.breakCount++;
         this.errorCount++;
-        jmsMessage.danger("An error occurred while parsing the content: %s", Result.formatErrors(e));
+        jmsMessage.danger("捕获异常：%s", Result.formatErrors(e));
     }
 
     public void jmsSummary() {
         int skipCount = this.taskCount - this.fetchCount;
-        jmsMessage.info("Task summary：There are %d tasks, %d updates, %d successes, %d failures, and %d skips.",
+        jmsMessage.notify("There are %d tasks, %d updates, %d successes, %d failures, and %d skips.",
                 this.taskCount, this.fetchCount, this.doneCount, this.errorCount, skipCount);
     }
 
