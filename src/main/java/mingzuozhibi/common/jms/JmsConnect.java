@@ -18,7 +18,8 @@ public class JmsConnect {
         JsonObject root = new JsonObject();
         root.addProperty("name", moduleName);
         root.addProperty("addr", moduleAddr);
-        jmsService.sendJson("module.connect", root.toString());
+        String json = root.toString();
+        jmsService.sendJson("module.connect", json, json);
     }
 
 }

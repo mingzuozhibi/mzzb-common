@@ -1,4 +1,4 @@
-package mingzuozhibi.common.util;
+package mingzuozhibi.common.spider;
 
 import io.webfolder.cdp.Launcher;
 import io.webfolder.cdp.session.Session;
@@ -16,8 +16,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 @Slf4j
-@Deprecated
-public abstract class ChromeUtils {
+public abstract class SpiderCdp4j {
 
     public static void doInSessionFactory(Consumer<SessionFactory> consumer) {
         String uuid = UUID.randomUUID().toString().substring(0, 8);
