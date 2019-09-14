@@ -37,31 +37,31 @@ public class JmsMessage {
     public void info(String message) {
         String msgData = buildMsgData("info", message);
         jmsService.sendJson("module.message", msgData);
-        log.info("JMS -> {} {}", "module.message", message);
+        log.info("JMS -> {}: {}", "module.message", message);
     }
 
     public void success(String message) {
         String msgData = buildMsgData("success", message);
         jmsService.sendJson("module.message", msgData);
-        log.info("JMS -> {} {}", "module.message", message);
+        log.info("JMS -> {}: {}", "module.message", message);
     }
 
     public void notify(String message) {
         String msgData = buildMsgData("notify", message);
         jmsService.sendJson("module.message", msgData);
-        log.info("JMS -> {} {}", "module.message", message);
+        log.info("JMS -> {}: {}", "module.message", message);
     }
 
     public void warning(String message) {
         String msgData = buildMsgData("warning", message);
         jmsService.sendJson("module.message", msgData);
-        log.warn("JMS -> {} {}", "module.message", message);
+        log.warn("JMS -> {}: {}", "module.message", message);
     }
 
     public void danger(String message) {
         String msgData = buildMsgData("danger", message);
         jmsService.sendJson("module.message", msgData);
-        log.error("JMS -> {} {}", "module.message", message);
+        log.error("JMS -> {}: {}", "module.message", message);
     }
 
     private String buildMsgData(String type, String text) {
