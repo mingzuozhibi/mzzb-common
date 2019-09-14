@@ -26,13 +26,16 @@ public class Result<T> {
         return Optional.ofNullable(errorMessage).orElseGet(() -> formatErrors(errors));
     }
 
-    @Deprecated
-    public boolean notDone() {
+    public boolean isUnfinished() {
         return content == null;
     }
 
-    public boolean isUnfinished() {
-        return content == null;
+    public void syncResult(Result<T> result) {
+        if (result.isUnfinished()) {
+            this.setErrorMessage(result.formatError());
+        } else {
+            this.setContent(result.getContent());
+        }
     }
 
     public static <T> Result<T> ofContent(T content) {
@@ -69,6 +72,11 @@ public class Result<T> {
                 .distinct()
                 .map(str -> String.format("(%d)[%s]", count.incrementAndGet(), str))
                 .collect(Collectors.joining(" "));
+    }
+
+    @Deprecated
+    public boolean notDone() {
+        return content == null;
     }
 
 }
