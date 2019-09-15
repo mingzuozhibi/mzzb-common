@@ -7,7 +7,7 @@ import mingzuozhibi.common.model.Result;
 @Slf4j
 public abstract class ThreadUtils {
 
-    private static void runWithDaemon(JmsMessage jmsMessage, String origin, Callback callback) {
+    public static void runWithDaemon(JmsMessage jmsMessage, String origin, Callback callback) {
         Thread thread = new Thread(() -> {
             try {
                 callback.call();
