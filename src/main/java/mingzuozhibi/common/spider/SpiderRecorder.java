@@ -50,7 +50,7 @@ public class SpiderRecorder {
 
     public void jmsStartUpdateRow(String origin) {
         this.fetchCount++;
-        jmsMessage.info("正在抓取：(%s/%d)[%s]", this.fetchCount, this.taskCount, origin);
+        jmsMessage.info("正在更新[%s](%s/%d)", origin, this.fetchCount, this.taskCount);
     }
 
     public boolean checkUnfinished(Result<?> result) {
@@ -66,7 +66,7 @@ public class SpiderRecorder {
     public void jmsSuccessRow(String origin, String message) {
         this.breakCount = 0;
         this.doneCount++;
-        jmsMessage.info("成功更新：[%s][%s]", origin, message);
+        jmsMessage.info("成功更新[%s](%s)", origin, message);
     }
 
     public void jmsFoundData(String message) {
@@ -103,24 +103,6 @@ public class SpiderRecorder {
         } catch (IOException e) {
             log.warn("An error occurred while recording the error content", e);
         }
-    }
-
-    @Deprecated
-    public boolean checkUnfinished(Result<?> result, String origin) {
-        if (result.isUnfinished()) {
-            jmsMessage.warning("抓取失败：%s", origin);
-            this.breakCount++;
-            this.errorCount++;
-            return true;
-        }
-        return false;
-    }
-
-    @Deprecated
-    public void jmsSuccessRow(String message) {
-        this.breakCount = 0;
-        this.doneCount++;
-        jmsMessage.info("成功更新：(%s/%d)[%s]", this.fetchCount, this.taskCount, message);
     }
 
 }
