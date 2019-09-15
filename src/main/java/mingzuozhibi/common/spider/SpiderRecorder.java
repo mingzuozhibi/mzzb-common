@@ -105,22 +105,4 @@ public class SpiderRecorder {
         }
     }
 
-    @Deprecated
-    public boolean checkUnfinished(Result<?> result, String origin) {
-        if (result.isUnfinished()) {
-            jmsMessage.warning("抓取失败：%s", origin);
-            this.breakCount++;
-            this.errorCount++;
-            return true;
-        }
-        return false;
-    }
-
-    @Deprecated
-    public void jmsSuccessRow(String message) {
-        this.breakCount = 0;
-        this.doneCount++;
-        jmsMessage.info("成功更新：(%s/%d)[%s]", this.fetchCount, this.taskCount, message);
-    }
-
 }

@@ -87,9 +87,4 @@ public class Result<T> {
                 .collect(Collectors.joining(" "));
     }
 
-    @Deprecated
-    public boolean notDone() {
-        return content == null;
-    }
-
 }
