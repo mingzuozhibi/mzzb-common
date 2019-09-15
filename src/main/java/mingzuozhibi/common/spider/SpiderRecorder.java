@@ -50,7 +50,7 @@ public class SpiderRecorder {
 
     public void jmsStartUpdateRow(String origin) {
         this.fetchCount++;
-        jmsMessage.info("正在抓取：(%s/%d)[%s]", this.fetchCount, this.taskCount, origin);
+        jmsMessage.info("正在更新：(%s/%d)[%s]", this.fetchCount, this.taskCount, origin);
     }
 
     public boolean checkUnfinished(Result<?> result) {
