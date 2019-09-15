@@ -66,7 +66,7 @@ public class SpiderRecorder {
     public void jmsSuccessRow(String origin, String message) {
         this.breakCount = 0;
         this.doneCount++;
-        jmsMessage.info("成功更新：(%s/%d)[%s][%s]", this.fetchCount, this.taskCount, origin, message);
+        jmsMessage.info("成功更新：[%s][%s]", origin, message);
     }
 
     public void jmsFoundData(String message) {
