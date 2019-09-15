@@ -14,11 +14,11 @@ import java.util.stream.Collectors;
 @Setter
 public class Result<T> {
 
-    private List<Exception> errors = new LinkedList<>();
+    private List<Throwable> errors = new LinkedList<>();
     private String errorMessage;
     private T content;
 
-    public void pushError(Exception e) {
+    public void pushError(Throwable e) {
         errors.add(e);
     }
 
@@ -44,9 +44,18 @@ public class Result<T> {
         return result;
     }
 
-    public static Result ofExceptions(Exception... exceptions) {
+    public static Result ofErrorCause(Throwable throwable) {
         Result result = new Result();
-        for (Exception e : exceptions) {
+        while (throwable != null) {
+            result.pushError(throwable);
+            throwable = throwable.getCause();
+        }
+        return result;
+    }
+
+    public static Result ofExceptions(Throwable... throwables) {
+        Result result = new Result();
+        for (Throwable e : throwables) {
             result.pushError(e);
         }
         return result;
@@ -58,13 +67,17 @@ public class Result<T> {
         return result;
     }
 
-    public static String formatErrors(Exception... exceptions) {
-        return formatErrors(Arrays.asList(exceptions));
+    public static String formatErrorCause(Throwable throwable) {
+        return ofErrorCause(throwable).formatError();
     }
 
-    public static String formatErrors(List<Exception> errors) {
+    public static String formatErrors(Throwable... throwables) {
+        return formatErrors(Arrays.asList(throwables));
+    }
+
+    public static String formatErrors(List<Throwable> errors) {
         if (errors == null || errors.isEmpty()) {
-            return "No Error";
+            return "[No Error]";
         }
         AtomicInteger count = new AtomicInteger(0);
         return errors.stream()
