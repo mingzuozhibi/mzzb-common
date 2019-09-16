@@ -106,8 +106,9 @@ cmd_help() {
   echo ""
   echo "support commands:"
   echo ""
-  echo "   rc                安装RC版本"
-  echo "   rc -l             显示RC版本"
+  echo "   rc                安装应用（预览版本）"
+  echo "   rc -f             安装应用（任意版本）"
+  echo "   rc -l             应用版本"
   echo ""
   echo "   st                启动应用"
   echo "   st -f             启动应用（强制重新构建）"
@@ -137,12 +138,16 @@ cmd_rc() {
     do_fetch develop
     do_build
     if [[ "$(app_jar)" =~ "-rc" ]]; then
-      mvn install
+      echo_cmd "mvn install"
       exit
     else
       echo "不是RC版本"
       exit
     fi
+    exit
+  elif [[ $# = 2 && $2 = '-f' ]]; then
+    do_fetch develop
+    echo_cmd "mvn clean install"
     exit
   elif [[ $# = 2 && $2 = '-l' ]]; then
     echo "$(app_jar)"
