@@ -32,12 +32,12 @@ public class SpiderRecorder {
     }
 
     public void jmsStartUpdate() {
-        jmsMessage.info("更新%s：开始", this.dataName);
-        jmsMessage.info("更新%s：共%d个任务", this.dataName, this.taskCount);
+        jmsMessage.notify("更新%s：开始", this.dataName);
+        jmsMessage.notify("更新%s：共%d个任务", this.dataName, this.taskCount);
     }
 
     public void jmsEndUpdate() {
-        jmsMessage.info("更新%s：结束", this.dataName);
+        jmsMessage.notify("更新%s：结束", this.dataName);
     }
 
     public boolean checkBreakCount(int maxBreakCount) {
