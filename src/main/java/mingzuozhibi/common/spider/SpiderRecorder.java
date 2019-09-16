@@ -32,12 +32,12 @@ public class SpiderRecorder {
     }
 
     public void jmsStartUpdate() {
-        jmsMessage.info("更新%s：开始", this.dataName);
-        jmsMessage.info("更新%s：共%d个任务", this.dataName, this.taskCount);
+        jmsMessage.notify("更新%s：开始", this.dataName);
+        jmsMessage.notify("更新%s：共%d个任务", this.dataName, this.taskCount);
     }
 
     public void jmsEndUpdate() {
-        jmsMessage.info("更新%s：结束", this.dataName);
+        jmsMessage.notify("更新%s：结束", this.dataName);
     }
 
     public boolean checkBreakCount(int maxBreakCount) {
@@ -50,7 +50,7 @@ public class SpiderRecorder {
 
     public void jmsStartUpdateRow(String origin) {
         this.fetchCount++;
-        jmsMessage.info("正在更新[%s](%s/%d)", origin, this.fetchCount, this.taskCount);
+        jmsMessage.info("正在更新：[%s](%s/%d)", origin, this.fetchCount, this.taskCount);
     }
 
     public boolean checkUnfinished(Result<?> result) {
@@ -66,7 +66,7 @@ public class SpiderRecorder {
     public void jmsSuccessRow(String origin, String message) {
         this.breakCount = 0;
         this.doneCount++;
-        jmsMessage.info("成功更新[%s](%s)", origin, message);
+        jmsMessage.info("成功更新：[%s][%s]", origin, message);
     }
 
     public void jmsFoundData(String message) {
@@ -89,7 +89,7 @@ public class SpiderRecorder {
     public void jmsSummary() {
         int skipCount = this.taskCount - this.fetchCount;
         jmsMessage.notify("There are %d tasks, %d updates, %d successes, %d failures, and %d skips.",
-                this.taskCount, this.fetchCount, this.doneCount, this.errorCount, skipCount);
+            this.taskCount, this.fetchCount, this.doneCount, this.errorCount, skipCount);
     }
 
     public static void writeContent(String content, String origin) {
