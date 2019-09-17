@@ -57,9 +57,9 @@ public class ConnectBean implements CommandLineRunner {
 
     private boolean isNotLocalAddress(InetAddress address) {
         return !address.isLoopbackAddress()
-                && !address.isAnyLocalAddress()
-                && !address.isLinkLocalAddress()
-                && !address.isMulticastAddress();
+            && !address.isAnyLocalAddress()
+            && !address.isLinkLocalAddress()
+            && !address.isMulticastAddress();
     }
 
 }

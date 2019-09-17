@@ -46,9 +46,9 @@ public abstract class SpiderCdp4j {
     }
 
     private static final String USER_AGENT =
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) " +
-                    "AppleWebKit/537.36 (KHTML, like Gecko) " +
-                    "Chrome/76.0.3809.132 Safari/537.36";
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) " +
+            "AppleWebKit/537.36 (KHTML, like Gecko) " +
+            "Chrome/76.0.3809.132 Safari/537.36";
 
     public static Result<String> waitResult(SessionFactory factory, String url) {
         Result<String> result = new Result<>();

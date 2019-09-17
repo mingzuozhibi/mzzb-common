@@ -2,8 +2,11 @@ package mingzuozhibi.common;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.Objects;
 
 public class BaseController {
 
@@ -12,6 +15,21 @@ public class BaseController {
         root.addProperty("success", false);
         root.addProperty("message", error);
         return root.toString();
+    }
+
+    public String objectResult(Boolean bool) {
+        Objects.requireNonNull(bool);
+        return objectResult(new JsonPrimitive(bool));
+    }
+
+    public String objectResult(Number number) {
+        Objects.requireNonNull(number);
+        return objectResult(new JsonPrimitive(number));
+    }
+
+    public String objectResult(String content) {
+        Objects.requireNonNull(content);
+        return objectResult(new JsonPrimitive(content));
     }
 
     public String objectResult(JsonElement date) {
