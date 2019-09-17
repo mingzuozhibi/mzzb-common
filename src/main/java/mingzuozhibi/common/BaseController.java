@@ -1,8 +1,10 @@
 package mingzuozhibi.common;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import mingzuozhibi.common.gson.GsonFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -10,7 +12,10 @@ import java.util.Objects;
 
 public class BaseController {
 
+    private Gson gson = GsonFactory.createGson();
+
     public String errorMessage(String error) {
+        Objects.requireNonNull(error);
         JsonObject root = new JsonObject();
         root.addProperty("success", false);
         root.addProperty("message", error);
@@ -32,22 +37,37 @@ public class BaseController {
         return objectResult(new JsonPrimitive(content));
     }
 
-    public String objectResult(JsonElement date) {
+    public String objectResult(Object data) {
+        Objects.requireNonNull(data);
+        return objectResult(gson.toJsonTree(data));
+    }
+
+    public String objectResult(JsonElement data) {
+        Objects.requireNonNull(data);
         JsonObject root = new JsonObject();
         root.addProperty("success", true);
-        root.add("data", date);
+        root.add("data", data);
         return root.toString();
     }
 
-    public String objectResult(JsonElement date, JsonElement page) {
+    public String objectResult(Object data, Page<?> page) {
+        Objects.requireNonNull(data);
+        Objects.requireNonNull(page);
+        return objectResult(gson.toJsonTree(data), buildPage(page));
+    }
+
+    public String objectResult(JsonElement data, JsonElement page) {
+        Objects.requireNonNull(data);
+        Objects.requireNonNull(page);
         JsonObject root = new JsonObject();
         root.addProperty("success", true);
-        root.add("data", date);
+        root.add("data", data);
         root.add("page", page);
         return root.toString();
     }
 
     public JsonElement buildPage(Page<?> page) {
+        Objects.requireNonNull(page);
         JsonObject object = new JsonObject();
         Pageable pageable = page.getPageable();
         object.addProperty("pageSize", pageable.getPageSize());
