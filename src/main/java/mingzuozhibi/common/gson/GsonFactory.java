@@ -2,6 +2,7 @@ package mingzuozhibi.common.gson;
 
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 import javax.persistence.Version;
@@ -41,18 +42,22 @@ public abstract class GsonFactory {
         });
         gson.registerTypeAdapter(Instant.class, new TypeAdapter<Instant>() {
             @Override
-            public void write(JsonWriter out, Instant instant) throws IOException {
+            public void write(JsonWriter writer, Instant instant) throws IOException {
                 if (instant != null) {
-                    out.value(instant.toEpochMilli());
+                    writer.value(instant.toEpochMilli());
+                } else {
+                    writer.nullValue();
                 }
             }
 
             @Override
-            public Instant read(JsonReader in) throws IOException {
-                if (in.hasNext()) {
-                    return Instant.ofEpochMilli(in.nextLong());
+            public Instant read(JsonReader reader) throws IOException {
+                if (reader.peek() == JsonToken.NULL) {
+                    reader.nextNull();
+                    return null;
+                } else {
+                    return Instant.ofEpochMilli(reader.nextLong());
                 }
-                return null;
             }
         });
         return gson.create();
