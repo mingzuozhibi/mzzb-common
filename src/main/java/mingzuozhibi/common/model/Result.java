@@ -81,10 +81,10 @@ public class Result<T> {
         }
         AtomicInteger count = new AtomicInteger(0);
         return errors.stream()
-                .map(e -> e.getClass().getSimpleName() + ": " + e.getMessage())
-                .distinct()
-                .map(str -> String.format("(%d)[%s]", count.incrementAndGet(), str))
-                .collect(Collectors.joining(" "));
+            .map(e -> e.getClass().getSimpleName() + ": " + e.getMessage())
+            .distinct()
+            .map(str -> String.format("(%d)[%s]", count.incrementAndGet(), str))
+            .collect(Collectors.joining(" "));
     }
 
 }
