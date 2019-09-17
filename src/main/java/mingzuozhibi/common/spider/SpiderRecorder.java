@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import static mingzuozhibi.common.model.Result.formatErrorCause;
+
 @Slf4j
 @Getter
 public class SpiderRecorder {
@@ -50,23 +52,13 @@ public class SpiderRecorder {
 
     public void jmsStartUpdateRow(String origin) {
         this.fetchCount++;
-        jmsMessage.info("正在更新：[%s](%s/%d)", origin, this.fetchCount, this.taskCount);
-    }
-
-    public boolean checkUnfinished(Result<?> result) {
-        if (result.isUnfinished()) {
-            jmsMessage.warning("抓取失败：%s", result.formatError());
-            this.breakCount++;
-            this.errorCount++;
-            return true;
-        }
-        return false;
+        jmsMessage.info("更新开始：[%s](%s/%d)", origin, this.fetchCount, this.taskCount);
     }
 
     public void jmsSuccessRow(String origin, String message) {
         this.breakCount = 0;
         this.doneCount++;
-        jmsMessage.info("成功更新：[%s][%s]", origin, message);
+        jmsMessage.info("更新成功：[%s][%s]", origin, message);
     }
 
     public void jmsFoundData(String message) {
@@ -74,16 +66,29 @@ public class SpiderRecorder {
         jmsMessage.success(message);
     }
 
-    public void jmsFailedRow(String message) {
+    public boolean checkUnfinished(String origin, Result<?> result) {
+        if (!result.isUnfinished()) {
+            return false;
+        }
         this.breakCount++;
         this.errorCount++;
-        jmsMessage.warning("更新失败：%s", message);
+        jmsMessage.warning("抓取失败：%s", result.formatError());
+        jmsMessage.warning("更新失败：[%s](%s/%d)", origin, this.fetchCount, this.taskCount);
+        return true;
     }
 
-    public void jmsErrorRow(Exception e) {
+    public void jmsFailedRow(String origin, String message) {
         this.breakCount++;
         this.errorCount++;
-        jmsMessage.danger("捕获异常：%s", Result.formatErrors(e));
+        jmsMessage.warning("数据异常：%s", message);
+        jmsMessage.warning("更新失败：[%s](%s/%d)", origin, this.fetchCount, this.taskCount);
+    }
+
+    public void jmsErrorRow(String origin, Throwable t) {
+        this.breakCount++;
+        this.errorCount++;
+        jmsMessage.danger("捕获异常：%s", formatErrorCause(t));
+        jmsMessage.danger("更新失败：[%s](%s/%d)", origin, this.fetchCount, this.taskCount);
     }
 
     public void jmsSummary() {
@@ -103,6 +108,31 @@ public class SpiderRecorder {
         } catch (IOException e) {
             log.warn("An error occurred while recording the error content", e);
         }
+    }
+
+    @Deprecated
+    public boolean checkUnfinished(Result<?> result) {
+        if (result.isUnfinished()) {
+            jmsMessage.warning("抓取失败：%s", result.formatError());
+            this.breakCount++;
+            this.errorCount++;
+            return true;
+        }
+        return false;
+    }
+
+    @Deprecated
+    public void jmsFailedRow(String message) {
+        this.breakCount++;
+        this.errorCount++;
+        jmsMessage.warning("更新失败：%s", message);
+    }
+
+    @Deprecated
+    public void jmsErrorRow(Exception e) {
+        this.breakCount++;
+        this.errorCount++;
+        jmsMessage.danger("捕获异常：%s", formatErrorCause(e));
     }
 
 }
