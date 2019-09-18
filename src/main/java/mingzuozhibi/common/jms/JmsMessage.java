@@ -22,4 +22,6 @@ public interface JmsMessage {
 
     void danger(String message);
 
+    void sendMsg(String type, String message);
+
 }

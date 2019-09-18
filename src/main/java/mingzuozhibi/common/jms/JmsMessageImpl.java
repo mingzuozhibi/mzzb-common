@@ -41,37 +41,36 @@ public class JmsMessageImpl implements JmsMessage {
 
     @Override
     public void info(String message) {
-        String msgData = buildMsgData("info", message);
-        jmsService.sendJson("module.message", msgData);
+        sendMsg("info", message);
         log.info("JMS -> {}: {}", "module.message", message);
     }
 
     @Override
     public void success(String message) {
-        String msgData = buildMsgData("success", message);
-        jmsService.sendJson("module.message", msgData);
+        sendMsg("success", message);
         log.info("JMS -> {}: {}", "module.message", message);
     }
 
     @Override
     public void notify(String message) {
-        String msgData = buildMsgData("notify", message);
-        jmsService.sendJson("module.message", msgData);
+        sendMsg("notify", message);
         log.info("JMS -> {}: {}", "module.message", message);
     }
 
     @Override
     public void warning(String message) {
-        String msgData = buildMsgData("warning", message);
-        jmsService.sendJson("module.message", msgData);
+        sendMsg("warning", message);
         log.warn("JMS -> {}: {}", "module.message", message);
     }
 
     @Override
     public void danger(String message) {
-        String msgData = buildMsgData("danger", message);
-        jmsService.sendJson("module.message", msgData);
+        sendMsg("danger", message);
         log.error("JMS -> {}: {}", "module.message", message);
+    }
+
+    public void sendMsg(String type, String message) {
+        jmsService.sendJson("module.message", buildMsgData(type, message));
     }
 
     private String buildMsgData(String type, String text) {
