@@ -68,11 +68,18 @@ public class BaseController {
 
     public JsonElement buildPage(Page<?> page) {
         Objects.requireNonNull(page);
-        JsonObject object = new JsonObject();
         Pageable pageable = page.getPageable();
-        object.addProperty("pageSize", pageable.getPageSize());
-        object.addProperty("currentPage", pageable.getPageNumber() + 1);
-        object.addProperty("totalElements", page.getTotalElements());
+        int currentPage = pageable.getPageNumber() + 1;
+        int pageSize = pageable.getPageSize();
+        long totalElements = page.getTotalElements();
+        return buildPage(currentPage, pageSize, totalElements);
+    }
+
+    public JsonElement buildPage(long currentPage, long pageSize, long totalElements) {
+        JsonObject object = new JsonObject();
+        object.addProperty("pageSize", pageSize);
+        object.addProperty("currentPage", currentPage);
+        object.addProperty("totalElements", totalElements);
         return object;
     }
 
