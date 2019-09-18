@@ -5,34 +5,17 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
-import javax.persistence.Version;
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.time.Instant;
-import java.util.LinkedList;
-import java.util.List;
 
 public abstract class GsonFactory {
-
-    private static List<Class<? extends Annotation>> shouldSkips = new LinkedList<>();
-
-    static {
-        shouldSkips.add(Version.class);
-        shouldSkips.add(Ignore.class);
-    }
 
     public static Gson createGson() {
         GsonBuilder gson = new GsonBuilder();
         gson.setExclusionStrategies(new ExclusionStrategy() {
-
             @Override
             public boolean shouldSkipField(FieldAttributes f) {
-                for (Class<? extends Annotation> annotation : shouldSkips) {
-                    if (f.getAnnotation(annotation) != null) {
-                        return true;
-                    }
-                }
-                return false;
+                return f.getAnnotation(Ignore.class) != null;
             }
 
             @Override
