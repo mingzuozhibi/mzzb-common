@@ -1,9 +1,9 @@
 package mingzuozhibi.common;
 
-import com.google.gson.annotations.Expose;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import mingzuozhibi.common.gson.Ignore;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,12 +15,11 @@ import java.io.Serializable;
 public abstract class BaseModel implements Serializable {
 
     @Id
-    @Expose
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Ignore
     @Version
-    @Expose(serialize = false, deserialize = false)
     private Long version;
 
 }

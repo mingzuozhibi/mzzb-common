@@ -44,7 +44,7 @@ public class SpiderRecorder {
 
     public boolean checkBreakCount(int maxBreakCount) {
         if (this.breakCount >= maxBreakCount) {
-            jmsMessage.warning("更新%s：连续%d次更新失败", maxBreakCount);
+            jmsMessage.warning("更新%s：连续%d次更新失败，任务提前终止", this.dataName, maxBreakCount);
             return true;
         }
         return false;
