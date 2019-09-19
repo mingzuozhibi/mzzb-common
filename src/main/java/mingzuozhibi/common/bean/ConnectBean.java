@@ -6,6 +6,7 @@ import mingzuozhibi.common.jms.JmsMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.net.InetAddress;
@@ -27,12 +28,23 @@ public class ConnectBean implements CommandLineRunner {
     @Autowired
     private JmsMessage jmsMessage;
 
+    private String moduleAddr;
+
     public void run(String... args) {
         Optional<String> hostAddress = getHostAddress();
         if (hostAddress.isPresent()) {
-            jmsConnect.connect(hostAddress.get() + ":" + port);
+            moduleAddr = hostAddress.get() + ":" + port;
+            jmsMessage.success("应用已启动 => " + moduleAddr);
+            sendConnect();
         } else {
             jmsMessage.warning("Can't get network address");
+        }
+    }
+
+    @Scheduled(cron = "0 0/10 * * * ?")
+    public void sendConnect() {
+        if (moduleAddr != null) {
+            jmsConnect.connect(moduleAddr);
         }
     }
 
