@@ -69,8 +69,8 @@ public class BaseController {
     public JsonElement buildPage(Page<?> page) {
         Objects.requireNonNull(page);
         Pageable pageable = page.getPageable();
-        int currentPage = pageable.getPageNumber() + 1;
         int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber() + 1;
         long totalElements = page.getTotalElements();
         return buildPage(currentPage, pageSize, totalElements);
     }
