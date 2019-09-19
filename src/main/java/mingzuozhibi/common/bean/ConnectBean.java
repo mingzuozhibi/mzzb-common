@@ -41,6 +41,7 @@ public class ConnectBean implements CommandLineRunner {
         }
     }
 
+    @Scheduled(cron = "0 0/10 * * * ?")
     public void sendConnect() {
         if (moduleAddr != null) {
             jmsConnect.connect(moduleAddr);
