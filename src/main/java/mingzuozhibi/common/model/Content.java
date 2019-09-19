@@ -21,34 +21,50 @@ public class Content {
 
     private static Gson gson = GsonFactory.createGson();
 
-    private JsonObject resultObj;
+    private JsonObject root;
 
     public Content(String content) {
         parseContent(content);
     }
 
     private void parseContent(String content) {
-        resultObj = gson.fromJson(content, JsonObject.class);
+        root = gson.fromJson(content, JsonObject.class);
     }
 
     public boolean isSuccess() {
-        return resultObj.get("success").getAsBoolean();
+        return root.get("success").getAsBoolean();
     }
 
     public String getMessage() {
-        return resultObj.get("message").getAsString();
+        return root.get("message").getAsString();
     }
 
     public JsonObject getObject() {
-        return getElement().getAsJsonObject();
+        return getData().getAsJsonObject();
     }
 
     public JsonArray getArray() {
-        return getElement().getAsJsonArray();
+        return getData().getAsJsonArray();
     }
 
-    public JsonElement getElement() {
-        return resultObj.get("data");
+    public JsonElement getData() {
+        return root.get("data");
+    }
+
+    public JsonObject getPage() {
+        return root.get("page").getAsJsonObject();
+    }
+
+    public JsonObject getRoot() {
+        return root;
+    }
+
+    public Page parsePage() {
+        return gson.fromJson(getPage(), Page.class);
+    }
+
+    public <T> T parseData(Class<T> dataType) {
+        return gson.fromJson(getData(), dataType);
     }
 
 }
