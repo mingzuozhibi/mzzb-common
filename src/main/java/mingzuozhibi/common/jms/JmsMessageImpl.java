@@ -41,44 +41,52 @@ public class JmsMessageImpl implements JmsMessage {
 
     @Override
     public void info(String message) {
-        sendMsg("info", message);
+        sendMsgNoLog("info", message);
         log.info("JMS -> {}: {}", "module.message", message);
     }
 
     @Override
     public void success(String message) {
-        sendMsg("success", message);
+        sendMsgNoLog("success", message);
         log.info("JMS -> {}: {}", "module.message", message);
     }
 
     @Override
     public void notify(String message) {
-        sendMsg("notify", message);
+        sendMsgNoLog("notify", message);
         log.info("JMS -> {}: {}", "module.message", message);
     }
 
     @Override
     public void warning(String message) {
-        sendMsg("warning", message);
+        sendMsgNoLog("warning", message);
         log.warn("JMS -> {}: {}", "module.message", message);
     }
 
     @Override
     public void danger(String message) {
-        sendMsg("danger", message);
+        sendMsgNoLog("danger", message);
         log.error("JMS -> {}: {}", "module.message", message);
     }
 
-    public void sendMsg(String type, String message) {
-        jmsService.sendJson("module.message", buildMsgData(type, message));
-    }
-
-    private String buildMsgData(String type, String text) {
+    public String buildMsg(String type, String text) {
         JsonObject data = new JsonObject();
         data.addProperty("type", type);
         data.addProperty("text", text);
         data.addProperty("createOn", Instant.now().toEpochMilli());
         return jmsService.buildJson(data);
+    }
+
+    public void sendMsgNoLog(String type, String message) {
+        jmsService.sendJson("module.message", buildMsg(type, message));
+    }
+
+    public void infoAndSend(String type, String message) {
+        jmsService.sendJson("module.message", buildMsg(type, message), message);
+    }
+
+    public void infoAndSend(String type, String message, String infoLog) {
+        jmsService.sendJson("module.message", buildMsg(type, message), infoLog);
     }
 
 }

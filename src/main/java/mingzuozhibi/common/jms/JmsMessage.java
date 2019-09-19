@@ -22,6 +22,10 @@ public interface JmsMessage {
 
     void danger(String message);
 
-    void sendMsg(String type, String message);
+    void sendMsgNoLog(String type, String message);
+
+    void infoAndSend(String type, String message);
+
+    void infoAndSend(String type, String message, String infoLog);
 
 }
