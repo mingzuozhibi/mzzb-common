@@ -5,10 +5,8 @@ import io.webfolder.cdp.session.Session;
 import io.webfolder.cdp.session.SessionFactory;
 import lombok.extern.slf4j.Slf4j;
 import mingzuozhibi.common.model.Result;
-import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -38,8 +36,7 @@ public abstract class SpiderCdp4j {
         try {
             Process process = Runtime.getRuntime().exec(cmds);
             process.waitFor();
-            String output = IOUtils.toString(process.getInputStream(), Charset.defaultCharset());
-            log.info("kill chrome " + uuid + ": " + output);
+            log.info("kill chrome " + uuid);
         } catch (IOException | InterruptedException e) {
             log.info("kill chrome " + uuid + ": " + e.getMessage(), e);
         }

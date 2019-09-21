@@ -41,35 +41,47 @@ public class JmsMessageImpl implements JmsMessage {
 
     @Override
     public void info(String message) {
-        sendMsgNoLog("info", message);
+        sendMsgNotLog("info", message);
         log.info("JMS -> {}: {}", "module.message", message);
     }
 
     @Override
     public void success(String message) {
-        sendMsgNoLog("success", message);
+        sendMsgNotLog("success", message);
         log.info("JMS -> {}: {}", "module.message", message);
     }
 
     @Override
     public void notify(String message) {
-        sendMsgNoLog("notify", message);
+        sendMsgNotLog("notify", message);
         log.info("JMS -> {}: {}", "module.message", message);
     }
 
     @Override
     public void warning(String message) {
-        sendMsgNoLog("warning", message);
+        sendMsgNotLog("warning", message);
         log.warn("JMS -> {}: {}", "module.message", message);
     }
 
     @Override
     public void danger(String message) {
-        sendMsgNoLog("danger", message);
+        sendMsgNotLog("danger", message);
         log.error("JMS -> {}: {}", "module.message", message);
     }
 
-    public String buildMsg(String type, String text) {
+    public void sendMsgNotLog(String type, String message) {
+        jmsService.sendJson("module.message", buildMsg(type, message));
+    }
+
+    public void sendMsgAndLog(String type, String message) {
+        jmsService.sendJson("module.message", buildMsg(type, message), message);
+    }
+
+    public void sendMsgAndLog(String type, String message, String record) {
+        jmsService.sendJson("module.message", buildMsg(type, message), record);
+    }
+
+    private String buildMsg(String type, String text) {
         JsonObject data = new JsonObject();
         data.addProperty("type", type);
         data.addProperty("text", text);
@@ -77,16 +89,19 @@ public class JmsMessageImpl implements JmsMessage {
         return jmsService.buildJson(data);
     }
 
+    @Deprecated
     public void sendMsgNoLog(String type, String message) {
-        jmsService.sendJson("module.message", buildMsg(type, message));
+        sendMsgNotLog(type, message);
     }
 
+    @Deprecated
     public void infoAndSend(String type, String message) {
-        jmsService.sendJson("module.message", buildMsg(type, message), message);
+        sendMsgAndLog(type, message);
     }
 
-    public void infoAndSend(String type, String message, String infoLog) {
-        jmsService.sendJson("module.message", buildMsg(type, message), infoLog);
+    @Deprecated
+    public void infoAndSend(String type, String message, String record) {
+        sendMsgAndLog(type, message, record);
     }
 
 }
