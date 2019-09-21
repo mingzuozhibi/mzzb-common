@@ -22,10 +22,19 @@ public interface JmsMessage {
 
     void danger(String message);
 
+    void sendMsgNotLog(String type, String message);
+
+    void sendMsgAndLog(String type, String message);
+
+    void sendMsgAndLog(String type, String message, String record);
+
+    @Deprecated
     void sendMsgNoLog(String type, String message);
 
+    @Deprecated
     void infoAndSend(String type, String message);
 
-    void infoAndSend(String type, String message, String infoLog);
+    @Deprecated
+    void infoAndSend(String type, String message, String record);
 
 }
