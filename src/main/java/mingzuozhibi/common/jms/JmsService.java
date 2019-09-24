@@ -29,6 +29,11 @@ public class JmsService {
         template.convertAndSend(destination, json);
     }
 
+    public void sendJsonAndLogger(String destination, String json, String message) {
+        template.convertAndSend(destination, json);
+        log.info(message);
+    }
+
     public void sendJsonAndJmsLog(String destination, String json, String message) {
         template.convertAndSend(destination, json);
         log.info("JMS -> {}: {}", destination, message);

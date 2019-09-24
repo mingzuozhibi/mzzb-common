@@ -63,12 +63,17 @@ public class JmsMessage {
         jmsService.sendJsonNotLog("module.message", buildMsg(type, message));
     }
 
-    public void sendMsgAndLog(String type, String message) {
+    public void sendMsgAndLogger(String type, String message) {
+        String jmsLog = String.format("[%s][%s]", type, message);
+        jmsService.sendJsonAndLogger("module.message", buildMsg(type, message), message);
+    }
+
+    public void sendMsgAndJmsLog(String type, String message) {
         String jmsLog = String.format("[%s][%s]", type, message);
         jmsService.sendJsonAndJmsLog("module.message", buildMsg(type, message), jmsLog);
     }
 
-    public void sendMsgAndLog(String type, String message, String jmsLog) {
+    public void sendMsgAndJmsLog(String type, String message, String jmsLog) {
         jmsService.sendJsonAndJmsLog("module.message", buildMsg(type, message), jmsLog);
     }
 
