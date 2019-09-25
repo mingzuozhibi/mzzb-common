@@ -5,14 +5,23 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import mingzuozhibi.common.gson.GsonFactory;
+import mingzuozhibi.common.model.Result;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Objects;
 
 public class BaseController {
 
     private Gson gson = GsonFactory.createGson();
+
+    @ResponseBody
+    @ExceptionHandler
+    public String errorHandler(Exception e) {
+        return errorMessage(Result.formatErrorCause(e));
+    }
 
     public String errorMessage(String error) {
         Objects.requireNonNull(error);
