@@ -1,0 +1,18 @@
+package mingzuozhibi.common;
+
+import mingzuozhibi.common.BaseResponse;
+
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+public abstract class BaseFilter extends BaseResponse implements Filter {
+
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        doFilter((HttpServletRequest) request, (HttpServletResponse) response, chain);
+    }
+
+    public abstract void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException;
+
+}

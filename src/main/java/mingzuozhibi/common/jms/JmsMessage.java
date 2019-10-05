@@ -1,40 +1,88 @@
 package mingzuozhibi.common.jms;
 
-public interface JmsMessage {
+import com.google.gson.JsonObject;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-    void info(String format, Object... args);
+import java.time.Instant;
 
-    void success(String format, Object... args);
+@Slf4j
+@Component
+public class JmsMessage {
 
-    void notify(String format, Object... args);
+    @Autowired
+    private JmsService jmsService;
 
-    void warning(String format, Object... args);
+    public void info(String format, Object... args) {
+        info(String.format(format, args));
+    }
 
-    void danger(String format, Object... args);
+    public void success(String format, Object... args) {
+        success(String.format(format, args));
+    }
 
-    void info(String message);
+    public void notify(String format, Object... args) {
+        notify(String.format(format, args));
+    }
 
-    void success(String message);
+    public void warning(String format, Object... args) {
+        warning(String.format(format, args));
+    }
 
-    void notify(String message);
+    public void danger(String format, Object... args) {
+        danger(String.format(format, args));
+    }
 
-    void warning(String message);
+    public void info(String message) {
+        sendMsgNotLog("info", message);
+        log.info("JMS -> {}: {}", "module.message", message);
+    }
 
-    void danger(String message);
+    public void success(String message) {
+        sendMsgNotLog("success", message);
+        log.info("JMS -> {}: {}", "module.message", message);
+    }
 
-    void sendMsgNotLog(String type, String message);
+    public void notify(String message) {
+        sendMsgNotLog("notify", message);
+        log.info("JMS -> {}: {}", "module.message", message);
+    }
 
-    void sendMsgAndLog(String type, String message);
+    public void warning(String message) {
+        sendMsgNotLog("warning", message);
+        log.warn("JMS -> {}: {}", "module.message", message);
+    }
 
-    void sendMsgAndLog(String type, String message, String record);
+    public void danger(String message) {
+        sendMsgNotLog("danger", message);
+        log.error("JMS -> {}: {}", "module.message", message);
+    }
 
-    @Deprecated
-    void sendMsgNoLog(String type, String message);
+    public void sendMsgNotLog(String type, String message) {
+        jmsService.sendJsonNotLog("module.message", buildMsg(type, message));
+    }
 
-    @Deprecated
-    void infoAndSend(String type, String message);
+    public void sendMsgAndLogger(String type, String message) {
+        String jmsLog = String.format("[%s][%s]", type, message);
+        jmsService.sendJsonAndLogger("module.message", buildMsg(type, message), message);
+    }
 
-    @Deprecated
-    void infoAndSend(String type, String message, String record);
+    public void sendMsgAndJmsLog(String type, String message) {
+        String jmsLog = String.format("[%s][%s]", type, message);
+        jmsService.sendJsonAndJmsLog("module.message", buildMsg(type, message), jmsLog);
+    }
+
+    public void sendMsgAndJmsLog(String type, String message, String jmsLog) {
+        jmsService.sendJsonAndJmsLog("module.message", buildMsg(type, message), jmsLog);
+    }
+
+    private String buildMsg(String type, String text) {
+        JsonObject data = new JsonObject();
+        data.addProperty("type", type);
+        data.addProperty("text", text);
+        data.addProperty("createOn", Instant.now().toEpochMilli());
+        return jmsService.buildJson(data);
+    }
 
 }
