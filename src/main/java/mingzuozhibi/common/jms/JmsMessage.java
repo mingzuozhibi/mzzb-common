@@ -64,7 +64,6 @@ public class JmsMessage {
     }
 
     public void sendMsgAndLogger(String type, String message) {
-        String jmsLog = String.format("[%s][%s]", type, message);
         jmsService.sendJsonAndLogger("module.message", buildMsg(type, message), message);
     }
 
