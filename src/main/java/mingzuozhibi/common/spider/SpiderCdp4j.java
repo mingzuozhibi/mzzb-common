@@ -27,6 +27,8 @@ public abstract class SpiderCdp4j {
         } catch (RuntimeException e) {
             log.warn(e.getMessage(), e);
         }
+        launcher.kill();
+        threadSleep(500);
         killChrome(uuid);
     }
 
